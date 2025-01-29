@@ -125,6 +125,27 @@ pipeline {
                 }
             }
         }
+        
+         // **New Stage to Clean Up Resources**
+        stage('Clean Up Resources') {
+            steps {
+                script {
+                    withCredentials([aws(credentialsId: 'AWSCredentials', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                        sh '''
+                        # Clean up Kubernetes Resources
+                        echo "Deleting Kubernetes service and deployment..."
+                        kubectl delete service mario-service || true
+                        kubectl delete deployment mario-deployment || true
+                        
+                        # Destroy Terraform-managed Infrastructure
+                        echo "Destroying Terraform-managed resources..."
+                        cd EKS-TF
+                        terraform destroy --auto-approve
+                        '''
+                    }
+                }
+            }
+        }
        
     }
 }
