@@ -1,86 +1,80 @@
 # **Super Mario Game on Kubernetes with Jenkins CI/CD**
 
-This repository demonstrates how to deploy the Super Mario game on Kubernetes using **AWS EKS** (Elastic Kubernetes Service) and **Jenkins CI/CD pipeline**.
+This repository demonstrates how to deploy the **Super Mario** game on **Kubernetes** using **AWS EKS** (Elastic Kubernetes Service) and **Jenkins CI/CD pipeline**.
 
 ## **Project Overview**
 
-In this project, I have used the following technologies:
+### **Technologies Used**
+- **Docker** 🐳 - For containerization of the Super Mario game.
+- **AWS EKS** ☁️ - For Kubernetes orchestration.
+- **Terraform** 🌍 - For managing the EKS infrastructure.
+- **Jenkins CI/CD Pipeline** 🚀 - To automate the build and deployment process.
 
-- **Docker** for containerization of the Super Mario game.
-- **AWS EKS** for Kubernetes orchestration.
-- **Terraform** for managing the EKS infrastructure.
-- **Jenkins CI/CD Pipeline** to automate the build and deployment process.
+## **Project Workflow**
 
-The project follows the steps below:
+### **1️⃣ Docker Image Pull and Push**
+- Pulls a Docker image for the Super Mario game.
+- Tags and pushes the image to **Docker Hub** for easy access.
 
-### **Docker Image Build and Push**:
-- A Docker image for the Super Mario game is pulled, tagged, and pushed to Docker Hub for easy access.
+### **2️⃣ Terraform for EKS Setup**
+- Uses **Terraform** to set up infrastructure on **AWS EKS**.
 
-### **Terraform for EKS Setup**:
-- Infrastructure on AWS EKS is set up using Terraform.
+### **3️⃣ Kubernetes Deployment**
+- Deploys the Docker image to **AWS EKS** using `kubectl`.
 
-### **Kubernetes Deployment**:
-- The Docker image is deployed to a Kubernetes cluster in AWS EKS using kubectl.
+### **4️⃣ Jenkins CI/CD Pipeline**
+- Automates the entire process: **code checkout → Docker image build → push to registry → Kubernetes deployment**.
 
-### **Jenkins Pipeline**:
-- The entire process is automated using a Jenkins pipeline, making the deployment process efficient and repeatable.
+---
 
-## **Steps Involved**
+## **Pipeline Stages** 🛠️
 
-### **Docker Image Build and Push**:
-- A Docker image for the Super Mario game is pulled from the repository and tagged with the appropriate name.
-- The image is pushed to a Docker registry (e.g., Docker Hub) for use in Kubernetes deployments.
+### **🔹 Clean Workspace**
+- Ensures a fresh build environment by removing old builds.
 
-### **Terraform Infrastructure Setup**:
-- The necessary infrastructure for EKS is created using Terraform. This includes creating an EKS cluster, configuring VPC, subnets, and other AWS resources.
-- The infrastructure is provisioned using the `terraform init`, `terraform plan`, and `terraform apply` commands.
+### **🔹 Checkout Code from GitHub**
+- Retrieves the latest code from the repository.
 
-### **Kubernetes Deployment**:
-- Kubernetes resources such as deployments and services are applied using kubectl.
-- The game is exposed to the internet via a Kubernetes service, making it accessible from the web.
+### **🔹 Build and Push Docker Image**
+- Pulls the Docker image, tags it, and pushes it to **Docker Hub**.
 
-### **Jenkins CI/CD Pipeline**:
-- Jenkins automates the entire workflow, from pulling code from GitHub, building and pushing the Docker image, to setting up the infrastructure and deploying the application on Kubernetes.
+### **🔹 Terraform Plan & Apply**
+- Runs `terraform plan` to preview infrastructure changes.
+- Applies the infrastructure changes using `terraform apply`.
 
-## **Pipeline Stages**
+### **🔹 Configure `kubectl` for EKS & Deploy**
+- Retrieves EKS cluster details from **Terraform outputs**.
+- Configures `kubectl` and deploys Kubernetes resources.
 
-### **Clean Workspace**:
-- Cleans up previous builds to ensure a clean slate for each run.
+### **🔹 Clean Up Resources** (Optional)
+- Cleans up deployed resources and destroys the infrastructure if needed.
 
-### **Checkout Code from GitHub**:
-- Checks out the latest code from the main branch of the repository.
+---
 
-### **Pull, Tag and Push Docker Image**:
-- Pulls the Docker image from the source, tags it appropriately, and pushes it to Docker Hub.
+## **Setup Instructions 🏗️**
 
-### **Terraform Plan**:
-- Runs `terraform plan` to check the changes to be applied to the AWS infrastructure.
+### **Prerequisites**
+- **Jenkins**, **Docker**, **Terraform**, and **kubectl** installed & configured.
+- **AWS credentials** added in Jenkins as `AWSCredentials`.
+- **Docker registry credentials** stored in Jenkins as `docker`.
 
-### **Terraform Apply**:
-- Applies the Terraform plan and creates the infrastructure on AWS EKS.
+### **Steps to Run Locally**
+1️⃣ Clone the repository:
+```bash
+ git clone https://github.com/soumyatata/P3-Super-Mario-K8s-Deployment.git
+```
+2️⃣ Navigate into the project directory:
+```bash
+ cd P3-Super-Mario-K8s-Deployment
+```
+3️⃣ Run the **Jenkins pipeline**.
 
-### **Get EKS Cluster Name**:
-- Retrieves the EKS cluster name from Terraform outputs and sets it as an environment variable.
+---
 
-### **Configure kubectl for EKS and Deploy**:
-- Configures `kubectl` to interact with the EKS cluster and deploys Kubernetes resources such as deployments and services.
+## **References 📚**
 
-### **Clean Up Resources**:
-- Cleans up the deployed Kubernetes resources and destroys Terraform-managed infrastructure to ensure a clean environment after testing.
+- **Ajay Kumar Yegireddi's Article** - [Deploying Super Mario on Kubernetes](https://mrcloudbook.com/deploying-super-mario-on-kubernetes/)
 
-## **Instructions to Run Locally**
+---
 
-1. Clone this repository:
-    ```bash
-    git clone https://github.com/soumyatata/P3-Super-Mario-K8s-Deployment.git
-    ```
-
-2. Make sure you have **Jenkins**, **Docker**, **Terraform**, and **kubectl** installed and configured.
-
-3. Set up **AWS credentials** in Jenkins for `AWSCredentials` and Docker registry credentials as `docker`.
-
-4. Run the **Jenkins pipeline**.
-
-## **Reference**
-
-- **Ajay Kumar Yegireddi's Article** - [This article](https://mrcloudbook.com/deploying-super-mario-on-kubernetes/) describes the manual process of deploying Super Mario on Kubernetes using Terraform and EKS.
+🚀 **Happy Coding & Kubernetes Deployment!** 🕹️
