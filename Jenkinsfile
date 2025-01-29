@@ -5,6 +5,7 @@ pipeline {
         AWS_CREDENTIALS_ID = 'AWSCredentials'
         DOCKER_REGISTRY_CREDENTIALS = 'docker'
         DOCKER_IMAGE = 'myawsdevopsjourney/p3-super-mario:latest'
+        AWS_REGION = 'us-east-1'
     }
 
     stages {
@@ -86,23 +87,44 @@ pipeline {
                     withCredentials([aws(credentialsId: 'AWSCredentials', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                         sh '''
                          cd EKS-TF
-                        terraform apply -input=false tfplan
+                         terraform apply -input=false tfplan
                         '''
                     }
                 }
             }
         }
-
-
-        stage('Kubernetes Deployment') {
+        
+        stage('Get EKS Cluster Name') {
             steps {
                 script {
-                    sh '''
-                    kubectl apply -f deployment.yaml
-                    kubectl apply -f service.yaml
-                    '''
+                    withCredentials([aws(credentialsId: 'AWSCredentials', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                        // Retrieve the cluster name dynamically using terraform output
+                        def clusterName = sh(script: 'cd EKS-TF && terraform output -raw eks_cluster_name', returnStdout: true).trim()
+                        echo "EKS Cluster Name: ${clusterName}"
+                        env.EKS_CLUSTER_NAME = clusterName // Set the EKS cluster name as an environment variable
+                    }
                 }
             }
         }
+
+        stage('Configure kubectl for EKS and Deploy') {
+            steps {
+                script {
+                    withCredentials([aws(credentialsId: 'AWSCredentials', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                        sh '''
+                        # Configure kubectl to use the newly created EKS cluster
+                        aws eks --region ${AWS_REGION} update-kubeconfig --name ${EKS_CLUSTER_NAME}
+                        
+                        kubectl apply -f deployment.yaml
+                        kubectl get all
+                        kubectl apply -f service.yaml
+                        kubectl get all
+                        kubectl describe service mario-service
+                        '''
+                    }
+                }
+            }
+        }
+       
     }
 }
