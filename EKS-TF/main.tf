@@ -21,6 +21,11 @@ resource "aws_iam_role_policy_attachment" "example-AmazonEKSClusterPolicy" {
   role       = aws_iam_role.example.name
 }
 
+resource "aws_iam_role_policy_attachment" "example-AmazonEKSServicePolicy" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSServicePolicy"
+  role       = aws_iam_role.example.name
+}
+
 #get vpc data
 data "aws_vpc" "default" {
   default = true
@@ -45,6 +50,7 @@ resource "aws_eks_cluster" "example" {
   # Otherwise, EKS will not be able to properly delete EKS managed EC2 infrastructure such as Security Groups.
   depends_on = [
     aws_iam_role_policy_attachment.example-AmazonEKSClusterPolicy,
+    aws_iam_role_policy_attachment.example-AmazonEKSServicePolicy,
   ]
 }
 

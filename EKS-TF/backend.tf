@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket = "ajay-mrcloudbook777" # Replace with your actual S3 bucket name
+    bucket = "super-mario-eks-terraform" 
     key    = "EKS/terraform.tfstate"
     region = "us-east-1"
   }
