@@ -17,7 +17,7 @@ pipeline {
 
         stage('Checkout code from GitHub') {
             steps {
-                git branch: 'main', url: 'https://github.com/soumyatata/P3-Super-Mario-K8s-Deployment.git'
+                git branch: 'main', url: 'https://github.com/soumyatata/P2-Super-Mario-K8s-Deployment'
             }
         }
 
