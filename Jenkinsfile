@@ -4,7 +4,7 @@ pipeline {
     environment {
         AWS_CREDENTIALS_ID = 'AWSCredentials'
         DOCKER_REGISTRY_CREDENTIALS = 'docker'
-        DOCKER_IMAGE = 'myawsdevopsjourney/p3-super-mario:latest'
+        DOCKER_IMAGE = 'myawsdevopsjourney/p2-super-mario:latest'
         AWS_REGION = 'us-east-1'
     }
 
@@ -35,20 +35,6 @@ pipeline {
                 }
             }
         }
-
-        // stage('Deploy Docker Container') {
-        //     steps {
-        //         script {
-        //             // Check if container is running before stopping and removing
-        //             sh '''
-        //             docker ps -q -f name=p3-super-mario || true
-        //             docker stop p3-super-mario || true
-        //             docker rm p3-super-mario || true
-        //             docker run -d --name p3-super-mario -p 5001:5001 ${DOCKER_IMAGE}
-        //             '''
-        //         }
-        //     }
-        // }
 
         stage('Terraform Plan') {
             steps {
