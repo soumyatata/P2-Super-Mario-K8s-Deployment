@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: mario-container
-        image: myawsdevopsjourney/p3-super-mario:latest
+        image: myawsdevopsjourney/p2-super-mario:latest
         resources:
           limits:
             memory: "128Mi"
