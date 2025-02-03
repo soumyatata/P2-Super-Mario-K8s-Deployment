@@ -60,10 +60,12 @@ This repository demonstrates how to deploy the **Super Mario** game on **Kuberne
 
 ### **Steps to Run Locally**
 1️⃣ Clone the repository:
+
 ```bash
  git clone https://github.com/soumyatata/P2-Super-Mario-K8s-Deployment
 ```
 2️⃣ Navigate into the project directory:
+
 ```bash
  cd P2-Super-Mario-K8s-Deployment
 ```
